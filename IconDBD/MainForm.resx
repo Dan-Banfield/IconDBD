@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label3.Text" xml:space="preserve">
+    <value>"Could I be banned for this?" While there's no guarantee you won't be banned when installing custom icon packs, the likelihood is quite low. Many individuals, including well-known content creators and streamers, have incorporated custom icon packs without encountering any bans.</value>
+  </data>
 </root>
