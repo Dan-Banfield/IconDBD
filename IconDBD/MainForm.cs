@@ -55,10 +55,22 @@ namespace IconDBD
                 return;
             }
 
+            ToggleControls(false);
+
             await Utilities.DeleteIconsAsync();
             await Utilities.ExtractZipFileAsync(IconPackManager.SelectedIconPack, IconPackManager.GetDbDIconPath());
 
             Utilities.MessageBox.Info("Success!", "Icon pack installed successfully.");
+
+            ToggleControls(true);
+        }
+
+        private void ToggleControls(bool enabled)
+        {
+            foreach (Control control in Controls)
+            {
+                control.Enabled = enabled;
+            }
         }
 
         #endregion
