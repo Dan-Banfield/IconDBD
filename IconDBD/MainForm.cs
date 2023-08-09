@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using Microsoft.Win32;
 using System.Windows.Forms;
+using Ookii.Dialogs.WinForms;
 
 namespace IconDBD
 {
@@ -12,29 +12,55 @@ namespace IconDBD
             InitializeComponent();
         }
 
-        private string GetDBDIconPath()
+        #region Event Handlers
+
+        private void selectIconPackButton_Click(object sender, EventArgs e)
         {
-            string steamInstallPath = GetSteamInstallPath(Environment.Is64BitOperatingSystem);
-
-            if (!string.IsNullOrEmpty(steamInstallPath))
+            using (VistaOpenFileDialog vistaOpenFileDialog = new VistaOpenFileDialog())
             {
-                string iconPath = Path.Combine(steamInstallPath, "steamapps", "common", "Dead by Daylight", "DeadByDaylight", "Content", "UI", "Icons");
+                #region File Dialog Settings
 
-                if (Directory.Exists(iconPath))
-                    return iconPath;
+                vistaOpenFileDialog.Title = "Select an Icon Pack";
+                vistaOpenFileDialog.Filter = "ZIP Files (*.zip)|*.zip|RAR Files (*.rar)|*.rar";
+                vistaOpenFileDialog.Multiselect = false;
+
+                #endregion
+
+                if (vistaOpenFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    IconPackManager.SelectedIconPack = vistaOpenFileDialog.FileName;
+                    selectedIconPackLabel.Text = $"Selected icon pack: {Path.GetFileNameWithoutExtension(IconPackManager.SelectedIconPack)}";
+                }
             }
-            return "";
         }
 
-        private string GetSteamInstallPath(bool is64Bit)
+        private void resetIconsToDefaultButton_Click(object sender, EventArgs e) => Utilities.MessageBox.Info("Information", "To reset the icons back to default:\n\n1. Open Steam and right-click Dead by Daylight.\n\n2. Click Properties.\n\n 3. Click Installed Files.\n\n 4. Click verify integrity of game files.\n\nWait for this to be done, and everything should be back to normal.");
+
+        private void installSelectedIconPackButton_Click(object sender, EventArgs e) => InstallDBDIconPack();
+
+        #endregion
+
+        #region Methods
+
+        private async void InstallDBDIconPack()
         {
-            string installPath = "";
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(is64Bit ? @"SOFTWARE\Wow6432Node\Valve\Steam" : @"SOFTWARE\Valve\Steam"))
+            if (string.IsNullOrEmpty(IconPackManager.SelectedIconPack))
             {
-                if (key != null)
-                    installPath = (string)key.GetValue("InstallPath");
+                Utilities.MessageBox.Error("Wait...", "You must select an icon pack first!");
+                return;
             }
-            return installPath;
+            if (string.IsNullOrEmpty(IconPackManager.GetDbDIconPath()))
+            {
+                Utilities.MessageBox.Error("Oops", "Dead by Daylight is not installed.");
+                return;
+            }
+
+            await Utilities.DeleteIconsAsync();
+            await Utilities.ExtractZipFileAsync(IconPackManager.SelectedIconPack, IconPackManager.GetDbDIconPath());
+
+            Utilities.MessageBox.Info("Success!", "Icon pack installed successfully.");
         }
+
+        #endregion
     }
 }
