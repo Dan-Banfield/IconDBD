@@ -25,7 +25,7 @@ namespace IconDBD
 
             if (!string.IsNullOrEmpty(steamInstallPath))
             {
-                string iconPath = Path.Combine(steamInstallPath, "steamapps", "common", "Dead by Daylight", "DeadByDaylight", "Content", "UI");
+                string iconPath = Path.Combine(steamInstallPath, "steamapps", "common", "Dead by Daylight", "DeadByDaylight", "Content", "UI", "Icons");
 
                 if (Directory.Exists(iconPath))
                     return iconPath;

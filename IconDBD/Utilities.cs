@@ -8,14 +8,9 @@ namespace IconDBD
     {
         public static class MessageBox
         {
-            public static void Info(string caption, string content)
-            {
-                System.Windows.Forms.MessageBox.Show(content, caption, System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
-            }
-            public static void Error(string caption, string content) 
-            {
-                System.Windows.Forms.MessageBox.Show(content, caption, System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-            }
+            public static void Info(string caption, string content) => System.Windows.Forms.MessageBox.Show(content, caption, System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
+
+            public static void Error(string caption, string content) => System.Windows.Forms.MessageBox.Show(content, caption, System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
         }
 
         public static async Task DeleteIconsAsync()
